@@ -114,6 +114,59 @@ LDES (Linked Data Event Streams) is a specification for publishing collections o
 3. **Members**: Individual data objects in JSON-LD format with timestamps
 4. **Traversal**: The harvester follows all pagination links recursively
 
+**Key Difference from IIIF Change Discovery**: LDES provides events that *embed full object representations* (or object fragments), so the evolving state of an object is delivered directly within the stream without requiring separate dereferencing of object URIs.
+
+## Understanding JSON-LD Context and Ontology Expansion
+
+When you harvest objects and convert them to N-Triples, you may notice that objects published using one ontology (like Linked Art) appear in the N-Triples output using a different ontology (like CIDOC-CRM). This is **not an error** but a fundamental feature of JSON-LD and semantic web technologies.
+
+### Why This Happens
+
+**JSON-LD Context Expansion**: JSON-LD documents include a `@context` that maps short property names to full URIs. When the RDFlib library parses JSON-LD and converts it to N-Triples, it:
+
+1. **Expands** all compact property names to their full URI form
+2. **Resolves** all namespace prefixes to complete URIs
+3. **Flattens** the nested JSON structure into RDF triples
+
+### Example
+
+A Linked Art object might use compact notation:
+```json
+{
+  "@context": "https://linked.art/ns/v1/linked-art.json",
+  "type": "HumanMadeObject",
+  "identified_by": [...]
+}
+```
+
+But in N-Triples, this becomes:
+```
+<uri> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object> .
+<uri> <http://www.cidoc-crm.org/cidoc-crm/P1_is_identified_by> ...
+```
+
+### Why Linked Art Expands to CIDOC-CRM
+
+**Linked Art is built on CIDOC-CRM**: [Linked Art](https://linked.art/) is a community-developed profile that uses CIDOC-CRM as its underlying ontology. The Linked Art context maps friendly property names (like `identified_by`) to their corresponding CIDOC-CRM properties (like `P1_is_identified_by`).
+
+This means:
+- **Linked Art** = Human-friendly JSON-LD with simplified property names
+- **CIDOC-CRM** = The formal ontology underneath with full semantic definitions
+- **N-Triples** = The expanded, fully-qualified RDF representation
+
+### Benefits of This Approach
+
+1. **Semantic Interoperability**: Different JSON-LD profiles can map to the same underlying ontology
+2. **Machine Readability**: N-Triples contain unambiguous, fully-qualified URIs
+3. **SPARQL Querying**: The expanded form makes it easy to query across different source formats
+4. **Standard Compliance**: CIDOC-CRM URIs are standardized and widely recognized
+
+### What This Means for Your Data
+
+- If you're importing into a triplestore, use the N-Triples directly - they contain the complete semantic information
+- If you need human-readable property names, retain the original JSON-LD with its context
+- The ontology URIs (CIDOC-CRM, Getty AAT, etc.) in the N-Triples are the "true" semantic representation of your data
+
 ## Technical Details
 
 ### Dependencies
