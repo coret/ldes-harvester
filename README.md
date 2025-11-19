@@ -212,6 +212,6 @@ This project is provided as-is for harvesting publicly available LDES endpoints.
 - [LDES Specification](https://w3id.org/ldes/specification)
 - [Rijksmuseum LDES](https://data.rijksmuseum.nl/docs/ldes/)
 
-** See also
+## See also
 
 - [IIIF Change Discovery harvester](https://github.com/coret/cd-harvester)
