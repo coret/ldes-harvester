@@ -1,4 +1,4 @@
-# LDES Harvester
+# Linked Data Event Streams Harvester
 
 A dockerized Python script for harvesting Linked Data Event Streams (LDES) endpoints and caching RDF data as N-Triples files. 
 
