@@ -146,7 +146,8 @@ The harvester follows this workflow:
 pip install -r requirements.txt
 
 # Run harvester
-python harvester.py --cache-dir ./cache https://data.rijksmuseum.nl/ldes/dataset/260250/collection.json
+python harvester.py --cache-dir ./cache \
+  https://data.rijksmuseum.nl/ldes/dataset/260250/collection.json
 ```
 
 ## License
